@@ -1,8 +1,5 @@
-#include "../include/delegate.h"
-#include <iostream>
+// #include "../include/delegate.h"
 
 namespace ES {
-    Delegate::Delegate() {
-        std::cout << "Delegate is created!" << std::endl;
-    }
+    
 }

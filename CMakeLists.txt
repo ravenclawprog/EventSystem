@@ -2,10 +2,7 @@ cmake_minimum_required(VERSION 3.9)
 
 project(eventSystemMain)
 
-# file (GLOB_RECURSE EVENT_SYSTEM_SOURCES CONFIGURE_DEPENDS "src/*.cpp")
-# file (GLOB_RECURSE EVENT_SYSTEM_HEADERS CONFIGURE_DEPENDS "src/*.h")
-
-set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_subdirectory("src")
