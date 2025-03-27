@@ -7,6 +7,9 @@ struct Obj{
     void callInt(const void* sender, int* param) {
         std::cout << "Calling call with param:" << *param << std::endl;
     }
+    void callOnlyInt(int* param) {
+        std::cout << "Calling call without sender with param:" << *param << std::endl;
+    }
 };
 int main()
 {
@@ -15,6 +18,10 @@ int main()
     ES::Delegate dl(a, &Obj::callInt);
     int i = 10;
     dl.notify(nullptr, &i);
+    
+    ES::BaseDelegate baseDelegate(a, &Obj::callInt);
+    ES::AbstractDelegate<const void*, int*> *absDelegate = &baseDelegate;
+    absDelegate->notify(nullptr, &i);
     delete a;
     return 0;
 }

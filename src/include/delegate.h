@@ -1,83 +1,127 @@
 #ifndef ES_DELEGATE_H
 #define ES_DELEGATE_H
+#include "abstract_delegate.h"
+
+#include <iostream>
+#include <type_traits>
+
 namespace ES
 {
 
-    template <class TClass, class... TArgs>
+    template <class TClass, class TReturn, class... TArgs>
     class Delegate
     {
     public:
-        typedef void (TClass::*NotifyMethod)(const void *, TArgs ...);
-
-        Delegate(const Delegate &delegate);
-        Delegate(TClass *obj, NotifyMethod method);
-        ~Delegate();
-        Delegate &operator=(const Delegate &delegate);
-        void disable();
-        bool isEqual(const Delegate &other);
-        Delegate *unwrap();
-        bool notify(const void *, TArgs...arguments);
+        using CallMethod = TReturn (TClass::*)(const void *, TArgs...);
+        Delegate(const Delegate &delegate)
+        {
+            std::cout << "Delegate is created!" << std::endl;
+            _callObject = delegate._callObject;
+            _callMethod = delegate._callMethod;
+        }
+        Delegate(TClass *obj, CallMethod method)
+        {
+            std::cout << "Delegate is created!" << std::endl;
+            _callObject = obj;
+            _callMethod = method;
+        }
+        ~Delegate()
+        {
+            std::cout << "Delegate is deleted!" << std::endl;
+        }
+        Delegate &operator=(const Delegate &delegate)
+        {
+            if (&delegate != this)
+            {
+                this->_callObject = delegate._callObject;
+                this->_callMethod = delegate._callMethod;
+            }
+            return *this;
+        }
+        bool operator==(const Delegate &other)
+        {
+            Delegate *pOther = &other;
+            return pOther && _callObject == pOther->_callObject && _callMethod == pOther->_callMethod;
+        }
+        void disable()
+        {
+            _callObject = nullptr;
+        }
+        TReturn notify(const void *sender, TArgs... arguments)
+        {
+            if (_callObject)
+            {
+                return (_callObject->*_callMethod)(sender, std::forward<TArgs>(arguments)...);
+            }
+            return TReturn{};
+        }
 
     protected:
-        TClass *_receiveObject;
-        NotifyMethod _receiveMethod;
+        TClass *_callObject;
+        CallMethod _callMethod;
 
     private:
         Delegate();
     };
     template <class TClass, class... TArgs>
-    Delegate<TClass, TArgs...>::Delegate(const Delegate &delegate)
+    class BaseDelegate : public AbstractDelegate<TArgs...>
     {
-        std::cout << "Delegate is created!" << std::endl;
-    }
-    template <class TClass, class... TArgs>
-    Delegate<TClass, TArgs...>::Delegate(TClass *obj, NotifyMethod method) : _receiveObject(obj), _receiveMethod(method)
-    {
-    }
-    template <class TClass, class... TArgs>
-    Delegate<TClass, TArgs...>::~Delegate()
-    {
-        std::cout << "Delegate is deleted!" << std::endl;
-    }
-    template <class TClass, class... TArgs>
-    Delegate<TClass, TArgs...> &Delegate<TClass, TArgs...>::operator=(const Delegate &delegate)
-    {
-        if (&delegate != this)
+    public:
+        using CallMethod = void (TClass::*)(TArgs...);
+        BaseDelegate(const BaseDelegate &delegate) : AbstractDelegate<TArgs...>(delegate)
         {
-            this->_receiveObject = delegate._receiveObject;
-            this->_receiveMethod = delegate._receiveMethod;
+            std::cout << "Delegate is created!" << std::endl;
+            _callObject = delegate._callObject;
+            _callMethod = delegate._callMethod;
         }
-        return *this;
-    }
-    template <class TClass, class... TArgs>
-    void Delegate<TClass, TArgs...>::disable()
-    {
-        _receiveObject = nullptr;
-    }
-
-    template <class TClass, class... TArgs>
-    bool Delegate<TClass, TArgs...>::notify(const void *sender, TArgs ...arguments)
-    {
-        if (_receiveObject)
+        BaseDelegate(TClass *obj, CallMethod method) : AbstractDelegate<TArgs...>()
         {
-            (_receiveObject->*_receiveMethod)(sender, arguments...);
-            return true;
+            std::cout << "Delegate is created!" << std::endl;
+            _callObject = obj;
+            _callMethod = method;
         }
-        else
+        ~BaseDelegate()
+        {
+            std::cout << "Delegate is deleted!" << std::endl;
+        }
+        BaseDelegate &operator=(const BaseDelegate &delegate)
+        {
+            if (&delegate != this)
+            {
+                this->_callObject = delegate._callObject;
+                this->_callMethod = delegate._callMethod;
+            }
+            return *this;
+        }
+        bool equal(const AbstractDelegate<TArgs...> &other) override
+        {
+            const BaseDelegate *pOther = dynamic_cast<const BaseDelegate *>(other.unwrap());
+            return pOther && _callObject == pOther->_callObject && _callMethod == pOther->_callMethod;
+        }
+        void disable() override
+        {
+            _callObject = nullptr;
+        }
+        bool notify(TArgs... arguments) override
+        {
+            if (_callObject)
+            {
+                (_callObject->*_callMethod)(arguments...);
+                return true;
+            }
             return false;
-    }
+        }
+        AbstractDelegate<TArgs...> *clone() const override 
+        { 
+            return new BaseDelegate(*this); 
+        }
 
-    template <class TClass, class... TArgs>
-    bool Delegate<TClass, TArgs...>::isEqual(const Delegate &other)
-    {
-        Delegate *pOther = dynamic_cast<Delegate *>(other.unwrap());
-        return pOther && _receiveObject == pOther->_receiveObject && _receiveMethod == pOther->_receiveMethod;
-    }
-    template <class TClass, class... TArgs>
-    Delegate<TClass, TArgs...> *Delegate<TClass, TArgs...>::unwrap()
-    {
-        return this;
-    }
+    protected:
+        TClass *_callObject;
+        CallMethod _callMethod;
 
+    private:
+        BaseDelegate();
+    };
 } // namespace ES
 #endif // ES_DELEGATE_H

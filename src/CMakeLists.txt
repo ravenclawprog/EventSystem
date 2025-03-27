@@ -6,6 +6,7 @@ project(eventSystem VERSION 0.0.1 DESCRIPTION "event system library TBD")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_library(eventSystem STATIC
+    include/abstract_delegate.h
     include/delegate.h
     # src/delegate.cpp
 )
