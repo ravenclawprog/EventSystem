@@ -11,7 +11,7 @@ namespace ES
         AbstractDelegate() {}
         AbstractDelegate(const AbstractDelegate &other) {}
         virtual ~AbstractDelegate() {}
-        virtual bool equal(const AbstractDelegate &other) = 0;
+        virtual bool equal(const AbstractDelegate &other) const = 0;
         virtual void disable() = 0;
         virtual bool notify(TArgs... arguments) = 0;
         virtual AbstractDelegate *clone() const = 0;

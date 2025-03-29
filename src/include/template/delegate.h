@@ -1,5 +1,5 @@
-#ifndef ES_DELEGATE_H
-#define ES_DELEGATE_H
+#ifndef ES_TEMPLATE_DELEGATE_H
+#define ES_TEMPLATE_DELEGATE_H
 #include "abstract_delegate.h"
 
 #include <iostream>
@@ -93,7 +93,7 @@ namespace ES
             }
             return *this;
         }
-        bool equal(const AbstractDelegate<TArgs...> &other) override
+        bool equal(const AbstractDelegate<TArgs...> &other) const override
         {
             const BaseDelegate *pOther = dynamic_cast<const BaseDelegate *>(other.unwrap());
             return pOther && _callObject == pOther->_callObject && _callMethod == pOther->_callMethod;
@@ -111,9 +111,9 @@ namespace ES
             }
             return false;
         }
-        AbstractDelegate<TArgs...> *clone() const override 
-        { 
-            return new BaseDelegate(*this); 
+        AbstractDelegate<TArgs...> *clone() const override
+        {
+            return new BaseDelegate(*this);
         }
 
     protected:
@@ -124,4 +124,4 @@ namespace ES
         BaseDelegate();
     };
 } // namespace ES
-#endif // ES_DELEGATE_H
+#endif // ES_TEMPLATE_DELEGATE_H
