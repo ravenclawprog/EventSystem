@@ -8,7 +8,18 @@ namespace ES
         class IDelegate
         {
         public:
-            virtual void call(AbstractEventData *eventData, IDelegate *sender) = 0;
+            virtual bool call(AbstractEventData *eventData, void *sender) = 0;
+            virtual bool equal(const IDelegate& other) const = 0;
+            virtual IDelegate *clone() const = 0;
+            virtual void disable() = 0;
+            virtual const IDelegate *unwrap() const
+            {
+                return this;
+            }
+            virtual IDelegate *unwrap()
+            {
+                return this;
+            }
             virtual ~IDelegate() {}
         };
     }   // namespace solid

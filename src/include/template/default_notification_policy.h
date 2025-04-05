@@ -34,7 +34,7 @@ public:
     DelegateHandle add(const TDelegate & delegate)
     {
         DelegatePtr pdl = DelegatePtr(delegate.clone());
-        _delegates.push_back(pdl); // maybe we need to use shared_ptr
+        _delegates.push_back(pdl);
         return pdl.get();
     }
 

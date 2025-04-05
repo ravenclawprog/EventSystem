@@ -10,7 +10,7 @@ namespace ES
         class INotificationStrategy
         {
         public:
-            virtual void notify(AbstractEventData *eventData) = 0;
+            virtual void notify(AbstractEventData *eventData, void *sender) = 0;
 
             virtual IDelegate *add(const IDelegate &delegate) = 0;
 

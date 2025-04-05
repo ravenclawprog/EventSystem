@@ -36,14 +36,14 @@ namespace ES
                 _policy->remove(dl);
             }
     
-            void operator()(AbstractEventData* eventData, IDelegate sender) {
-                notify(AbstractEventData* eventData, IDelegate sender);
+            void operator()(AbstractEventData* eventData, void* sender) {
+                notify(eventData, sender);
             }
     
-            void notify(AbstractEventData* eventData, IDelegate sender) {
+            void notify(AbstractEventData* eventData, void* sender) {
                 if (!_enabled)
                     return;
-                _policy->notify(AbstractEventData* eventData, IDelegate sender);
+                _policy->notify(eventData, sender);
             }
     
             bool hasDelegates() const { 
