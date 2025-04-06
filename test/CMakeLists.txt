@@ -16,15 +16,29 @@ FetchContent_MakeAvailable(googletest)
 # enable_testing()
 
 add_executable(
-  dummy_test
-  dummyTest.cpp
+  solidSolutionTest
+  solidSolutionTest.cpp
 )
-target_include_directories(dummy_test PRIVATE "../src/include/")
+target_include_directories(solidSolutionTest PRIVATE "../src/include/")
 target_link_libraries(
-    dummy_test
+    solidSolutionTest
     GTest::gtest_main
     eventSystem
 )
 
 include(GoogleTest)
-gtest_discover_tests(dummy_test)
+gtest_discover_tests(solidSolutionTest)
+
+add_executable(
+  templateSolutionTest
+  templateSolutionTest.cpp
+)
+target_include_directories(templateSolutionTest PRIVATE "../src/include/")
+target_link_libraries(
+    templateSolutionTest
+    GTest::gtest_main
+    eventSystem
+)
+
+include(GoogleTest)
+gtest_discover_tests(templateSolutionTest)
