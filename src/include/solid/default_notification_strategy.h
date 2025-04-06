@@ -30,6 +30,12 @@ namespace ES
                 _delegates.push_back(pdl);
                 return pdl.get();
             }
+            virtual IDelegate *add(IDelegate* delegate) override
+            {
+                DelegatePtr pdl = DelegatePtr(delegate);
+                _delegates.push_back(pdl);
+                return pdl.get();
+            }
 
             virtual void remove(const IDelegate &delegate) override
             {

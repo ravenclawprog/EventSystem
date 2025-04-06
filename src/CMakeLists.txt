@@ -19,6 +19,8 @@ add_library(eventSystem STATIC
     include/solid/default_notification_strategy.h
     include/solid/interface_delegate.h
     include/solid/interface_notification_strategy.h
+    include/solid/default_event_data.h
+    include/solid/default_event.h
     # src/delegate.cpp
 )
 set_target_properties(eventSystem PROPERTIES LINKER_LANGUAGE CXX)

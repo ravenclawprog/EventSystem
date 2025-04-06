@@ -38,6 +38,13 @@ public:
         return pdl.get();
     }
 
+    DelegateHandle add(TDelegate&& delegate)
+    {
+        DelegatePtr pdl = DelegatePtr(delegate.clone());
+        _delegates.push_back(pdl);
+        return pdl.get();
+    }
+
     void remove(const TDelegate & delegate)
     {
         for (Iterator it = _delegates.begin(); it != _delegates.end(); ++it)

@@ -21,6 +21,10 @@ namespace ES
             _policy.add(dl);
         }
 
+        void operator+=(TDelegate&& dl) {
+            _policy.add(std::move(dl));
+        }
+
         void operator-=(const TDelegate &dl) {
             _policy.remove(dl);
         }

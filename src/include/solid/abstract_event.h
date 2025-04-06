@@ -1,5 +1,5 @@
-#ifndef ES_TEMPLATE_ABSTRACT_EVENT_H
-#define ES_TEMPLATE_ABSTRACT_EVENT_H
+#ifndef ES_SOLID_ABSTRACT_EVENT_H
+#define ES_SOLID_ABSTRACT_EVENT_H
 #include "interface_delegate.h"
 #include "interface_notification_strategy.h"
 #include "abstract_event_data.h"
@@ -18,9 +18,13 @@ namespace ES
             {
             }
     
-            virtual ~AbstractEvent() {}
+            virtual ~AbstractEvent() { _policy->clear(); }
     
             void operator+=(const IDelegate &dl) {
+                _policy->add(dl);
+            }
+
+            void operator+=(IDelegate *dl) {
                 _policy->add(dl);
             }
     
@@ -31,8 +35,12 @@ namespace ES
             IDelegate* add(const IDelegate &dl) {
                 return _policy->add(dl);
             }
+
+            IDelegate* add(IDelegate* dl) {
+                return _policy->add(dl);
+            }
     
-            void remove(IDelegate dl) {
+            void remove(IDelegate& dl) {
                 _policy->remove(dl);
             }
     
@@ -80,4 +88,4 @@ namespace ES
         };
     }
 }
-#endif // ES_ABSTRACT_EVENT_H
+#endif // ES_SOLID_ABSTRACT_EVENT_H
